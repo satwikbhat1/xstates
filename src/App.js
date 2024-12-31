@@ -1,7 +1,7 @@
 // src/components/LocationSelector.js
 import React, { useState, useEffect } from "react";
 
-const LocationSelector = () => {
+const App = () => {
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [states, setStates] = useState([]);
