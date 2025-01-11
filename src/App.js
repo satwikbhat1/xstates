@@ -1,4 +1,3 @@
-// src/components/LocationSelector.js
 import React, { useState, useEffect } from "react";
 
 const App = () => {
@@ -12,30 +11,56 @@ const App = () => {
   // Fetch Countries on Component Mount
   useEffect(() => {
     fetch("https://crio-location-selector.onrender.com/countries")
-      .then(response => response.json())
-      .then(data => setCountries(data))
-      .catch(error => console.error("Error fetching countries:", error));
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to fetch countries");
+        return response.json();
+      })
+      .then((data) => setCountries(data))
+      .catch((error) => {
+        console.error("Error fetching countries:", error);
+        alert("Failed to load countries. Please try again later.");
+      });
   }, []);
 
   // Fetch States when a Country is Selected
   const handleCountryChange = (country) => {
     setSelectedCountry(country);
     setSelectedState("");
+    setStates([]);
     setCities([]);
-    fetch(`https://crio-location-selector.onrender.com/country=${country}/states`)
-      .then(response => response.json())
-      .then(data => setStates(data))
-      .catch(error => console.error("Error fetching states:", error));
+    if (!country) return; // Exit if no country is selected
+
+    fetch(`https://crio-location-selector.onrender.com/countries/${country}/states`)
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to fetch states");
+        return response.json();
+      })
+      .then((data) => setStates(data))
+      .catch((error) => {
+        console.error("Error fetching states:", error);
+        alert("Failed to load states for the selected country.");
+      });
   };
 
   // Fetch Cities when a State is Selected
   const handleStateChange = (state) => {
     setSelectedState(state);
     setSelectedCity("");
-    fetch(`https://crio-location-selector.onrender.com/country=${selectedCountry}/state=${state}/cities`)
-      .then(response => response.json())
-      .then(data => setCities(data))
-      .catch(error => console.error("Error fetching cities:", error));
+    setCities([]);
+    if (!state) return; // Exit if no state is selected
+
+    fetch(
+      `https://crio-location-selector.onrender.com/countries/${selectedCountry}/states/${state}/cities`
+    )
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to fetch cities");
+        return response.json();
+      })
+      .then((data) => setCities(data))
+      .catch((error) => {
+        console.error("Error fetching cities:", error);
+        alert("Failed to load cities for the selected state.");
+      });
   };
 
   return (
