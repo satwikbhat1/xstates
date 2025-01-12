@@ -66,6 +66,9 @@ const App = () => {
           <option value={cities}>{cities}</option>
         ))}
       </select>
+      <h1>
+        You selected {selCity}, {selState}, {selCountry}
+      </h1>
     </div>
   );
 };
