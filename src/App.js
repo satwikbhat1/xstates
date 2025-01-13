@@ -67,7 +67,9 @@ const App = () => {
         ))}
       </select>
       <h1>
-        You selected {selCity}, {selState}, {selCountry}
+        {selCity && selState && selCountry
+          ? `You selected ${selCity}, ${selState}, ${selCountry}`
+          : "Please select a location"}
       </h1>
     </div>
   );
